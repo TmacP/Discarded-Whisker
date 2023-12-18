@@ -1,6 +1,6 @@
 components {
-  id: "card_handler"
-  component: "/Scripts/cards/card_handler.script"
+  id: "card_script"
+  component: "/Scripts/cards/card.script"
   position {
     x: 0.0
     y: 0.0
