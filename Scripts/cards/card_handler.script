@@ -1,0 +1,19 @@
+-- card_handler.script
+
+local card_data = require "Scripts.cards.card_data"
+
+function init(self)
+	self.cards = {}
+	self:spawnCards()
+end
+
+function spawnCards(self)
+	local spawn_position = vmath.vector3(0, 0, 0) -- Set the initial spawn position
+
+	for _, data in ipairs(card_data) do
+		-- Use a local URL to reference the card factory within the same collection
+		local card_url = factory.create("#card_factory", spawn_position, nil, { data = data })
+		table.insert(self.cards, card_url)
+		spawn_position.x = spawn_position.x + 200 -- Adjust the x-position for the next card
+	end
+end

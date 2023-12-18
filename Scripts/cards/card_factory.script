@@ -1,0 +1,7 @@
+-- cards/card_factory.script
+local card_data = require "Scripts.cards.card_data"
+function init(self)
+	self.data = go.get("#", "data")
+	-- Set card properties using self.data
+	-- Example: go.set("#sprite", "image", self.data.sprite)
+end
