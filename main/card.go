@@ -17,7 +17,7 @@ embedded_components {
   id: "sprite"
   type: "sprite"
   data: "tile_set: \"/Assets/CardAssets/card.atlas\"\n"
-  "default_animation: \"SeaHorseCard\"\n"
+  "default_animation: \"SeaHorse\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""

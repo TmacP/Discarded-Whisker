@@ -1,5 +1,9 @@
 images {
-  image: "/Assets/CardAssets/SeaHorseCard.png"
+  image: "/Assets/CardAssets/SeaHorse.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/Assets/CardAssets/Chest.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

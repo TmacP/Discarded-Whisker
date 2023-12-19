@@ -1,7 +1,8 @@
 -- card_data.lua
 
 local card_data = {
-	{ name = "Card1", cost = 3, sprite = "/Assets/CardAssets/SeaHorseCard.png" }
+	{ name = "SeaHorse", sprite = "/Assets/CardAssets/SeaHorseCard.png"},
+	{ name = "Chest", sprite = "/Assets/CardAssets/ChestCard.png"}
 	-- Add more card data as needed
 }
 

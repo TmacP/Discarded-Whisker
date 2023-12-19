@@ -1,3 +1,7 @@
+-- card_factory.script
+
+local card_data = require "Scripts.cards.card_data"
+
 local frequency = 0.5
 local bonus_prob = 0.2
 local min_y = 60
@@ -13,12 +17,21 @@ function update(self, dt)
 	self.timer = self.timer - dt
 	if self.timer <= 0 then
 		self.timer = 1/frequency
+
+		
+		local randomCardIndex = math.random(1, #card_data)
+		print("-- Choose a random card from card_data: " .. randomCardIndex)
+
+		local selectedCard = card_data[randomCardIndex]
+		print("-- the selectedCard's name: " .. selectedCard.name .. " and sprite: " .. selectedCard.sprite)
+		
+		local cardProperties = { name =  hash(selectedCard.name), sprite = hash(selectedCard.sprite) }
+		print("-- card properties: ") pprint(cardProperties)
+		
+		-- Calculate the spawn position
 		local p = go.get_position()
 		p.y = vmath.lerp(math.random(), min_y, max_y)
-		local component = "#factory"
-		if math.random() < bonus_prob then
-			-- component = "#bonus_factory"
-		end
-		factory.create(component, p)
+		
+		factory.create("#factory", p, nil, cardProperties)
 	end
 end
