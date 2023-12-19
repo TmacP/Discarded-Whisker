@@ -2,7 +2,7 @@
 
 local card_data = require "Scripts.cards.card_data"
 
-local frequency = 0.5
+local frequency = 10
 local bonus_prob = 0.2
 local min_y = 60
 local max_y = 600
@@ -23,9 +23,9 @@ function update(self, dt)
 		print("-- Choose a random card from card_data: " .. randomCardIndex)
 
 		local selectedCard = card_data[randomCardIndex]
-		print("-- the selectedCard's name: " .. selectedCard.name .. " and sprite: " .. selectedCard.sprite)
+		print("-- the selectedCard's name: " .. selectedCard.name)
 		
-		local cardProperties = { name =  hash(selectedCard.name), sprite = hash(selectedCard.sprite) }
+		local cardProperties = { name =  hash(selectedCard.name)}
 		print("-- card properties: ") pprint(cardProperties)
 		
 		-- Calculate the spawn position

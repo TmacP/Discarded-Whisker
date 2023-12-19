@@ -1,7 +1,6 @@
 -- card.script
 
 go.property("name", hash(""))
-go.property("sprite", hash(""))
 
 local speed = -240
 
@@ -10,10 +9,7 @@ function init(self)
 	-- Initialization code here
 	msg.post("#sprite", "play_animation", { id = self.name })
 	print(self.name)
-	--self.sprite
 
-	-- Set the sprite based on the property
-	--go.set("#sprite", "image", hash(self.sprite))
 end
 
 
