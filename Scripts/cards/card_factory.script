@@ -32,3 +32,11 @@ function update(self, dt)
 		end
 	end
 end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("end_turn_message") then
+		-- Handle the message indicating the turn has ended
+		print("-- Player's turn has ended.")
+		-- Add your logic here to respond to the end of the turn
+	end
+end
