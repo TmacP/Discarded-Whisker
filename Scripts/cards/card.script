@@ -7,9 +7,5 @@ function init(self)
 	-- Initialization code here
 	msg.post("#sprite", "play_animation", { id = self.name })
 
-	-- Set the initial position
-	local p = go.get_position()
-	p.x = 20 -- Set the desired x-coordinate
-	p.y = 29 -- Set the desired y-coordinate
-	go.set_position(p)
+
 end

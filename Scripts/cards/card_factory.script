@@ -4,6 +4,9 @@ local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
 
 local rounds = 1
+local y = 29
+local x = 20
+
 
 local currentPlayer = playerModule.create()  -- Create a player instance
 local ai = playerModule.create() -- create an ai opponent
@@ -28,19 +31,23 @@ function player_turn(self)
 
 		-- Modify the x-coordinate for the player's hand display
 		local p = go.get_position()
-		p.x = p.x + 100
-
+		p.x = x -- Set the desired x-coordinate
+		p.y = y -- Set the desired y-coordinate
 		factory.create("#factory", p, nil, cardProperties)
+		-- Set the initial position
+		go.set_position(p)
+		x = x + 10
+
 	else
 		print("-- No cards left in the player's deck.")
 	end
 
 	-- Print the player's hand
-	print("-- Player's hand:")
-
+	local hand = "-- Player's hand:"
 	for _, card in ipairs(currentPlayer.hand) do
-		print("-- Card in hand: " .. card.name)
+		hand = hand .. " " .. card.name
 	end
+	print(hand)
 end
 
 
@@ -50,23 +57,16 @@ function ai_turn(self)
 	local drawnCard = playerModule.drawCard(ai)
 
 	if drawnCard then
-		--print("-- Drawing card from player's deck: " .. drawnCard.name)
-
-		local cardProperties = { name = hash(drawnCard.name) }
-		--print("-- Card properties: ")
-		--pprint(cardProperties)
-
-		factory.create("#factory", nil, nil, cardProperties)
+		print("-- Drawing card from ai's deck: " .. drawnCard.name)
 	else
 		print("-- No cards left in the ai's deck.")
 	end
-	-- Print ai's hand
-	print("-- Player's hand:")
-
+	-- Print the player's hand
+	local hand = "-- ai's hand:"
 	for _, card in ipairs(ai.hand) do
-		print("-- Card in ai's hand: " .. card.name)
+		hand = hand .. " " .. card.name
 	end
-
+	print(hand)
 
 	
 	rounds = rounds + 1
