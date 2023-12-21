@@ -10,7 +10,7 @@ function init(self)
 
 	-- Set the initial position
 	local p = go.get_position()
-	p.x = 65 -- Set the desired x-coordinate
-	p.y = 90 -- Set the desired y-coordinate
+	p.x = 20 -- Set the desired x-coordinate
+	p.y = 29 -- Set the desired y-coordinate
 	go.set_position(p)
 end

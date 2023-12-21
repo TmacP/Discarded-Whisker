@@ -6,9 +6,9 @@ function player.create()
 	local newPlayer = {
 		deck = {
 			--{ name = "SeaHorse" },
-			{ name = "Deer" },
-		--{ name = "RedFox" },
-			{ name = "Chest" },
+			{ name = "DeerSmall" },
+			{ name = "RedFoxSmall" }, 
+			{ name = "ChestSmall" },
 		},
 		hand = {}
 	}
