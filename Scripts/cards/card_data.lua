@@ -3,7 +3,8 @@
 local card_data = {
 	{ name = "SeaHorse"},
 	{ name = "Deer"},
-	{ name = "Chest"}
+	{ name = "Chest"},
+	{ name = "RedFox"}
 	-- Add more card data as needed
 }
 

@@ -1,14 +1,13 @@
 -- card_factory.script
 
 local card_data = require "Scripts.cards.card_data"
+local playerModule = require "Scripts.player"
 
-local frequency = 10
-local bonus_prob = 0.2
-local min_y = 60
-local max_y = 600
+local frequency = 1
+local currentPlayer = playerModule.create()  -- Create a player instance
 
 function init(self)
-	self.timer = 1/frequency
+	self.timer = 1 / frequency
 	-- make the game deterministic
 	math.randomseed(0)
 end
@@ -16,22 +15,20 @@ end
 function update(self, dt)
 	self.timer = self.timer - dt
 	if self.timer <= 0 then
-		self.timer = 1/frequency
+		self.timer = 1 / frequency
 
-		
-		local randomCardIndex = math.random(1, #card_data)
-		print("-- Choose a random card from card_data: " .. randomCardIndex)
+		local drawnCard = playerModule.drawCard(currentPlayer)
 
-		local selectedCard = card_data[randomCardIndex]
-		print("-- the selectedCard's name: " .. selectedCard.name)
-		
-		local cardProperties = { name =  hash(selectedCard.name)}
-		print("-- card properties: ") pprint(cardProperties)
-		
-		-- Calculate the spawn position
-		local p = go.get_position()
-		p.y = vmath.lerp(math.random(), min_y, max_y)
-		
-		factory.create("#factory", p, nil, cardProperties)
+		if drawnCard then
+			print("-- Drawing card from player's deck: " .. drawnCard.name)
+
+			local cardProperties = { name = hash(drawnCard.name) }
+			print("-- Card properties: ")
+			pprint(cardProperties)
+
+			factory.create("#factory", nil, nil, cardProperties)
+		else
+			print("-- No cards left in the player's deck.")
+		end
 	end
 end
