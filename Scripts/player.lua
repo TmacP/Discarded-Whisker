@@ -5,10 +5,10 @@ local player = {}
 function player.create()
 	local newPlayer = {
 		deck = {
-			--{ name = "SeaHorse" },
-			{ name = "DeerSmall" },
-			{ name = "RedFoxSmall" }, 
-			{ name = "ChestSmall" },
+			{ name = "SeaHorse" },
+			{ name = "Deer" },
+			{ name = "RedFox" }, 
+			{ name = "Chest" },
 		},
 		hand = {}
 	}

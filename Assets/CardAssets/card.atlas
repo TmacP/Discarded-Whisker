@@ -1,13 +1,17 @@
 images {
-  image: "/Assets/CardAssets/RedFoxSmall.png"
+  image: "/Assets/CardAssets/RedFox.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/Assets/CardAssets/DeerSmall.png"
+  image: "/Assets/CardAssets/Chest.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/Assets/CardAssets/ChestSmall.png"
+  image: "/Assets/CardAssets/Deer.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/Assets/CardAssets/SeaHorse.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0
