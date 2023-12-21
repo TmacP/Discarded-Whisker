@@ -10,27 +10,39 @@ local ai = playerModule.create() -- create an ai opponent
 
 function init(self)
 	player_turn(self)
+	-- draw the back of players deck to show the deck TODO
 end
 
 
 
 function player_turn(self)
-	print("-------------------- ROUND ".. tostring(rounds))
+	print("-------------------- ROUND " .. tostring(rounds))
 	print("-- player's turn begins")
+	
+	-- player draws card from their deck into their hand
 	local drawnCard = playerModule.drawCard(currentPlayer)
 
 	if drawnCard then
-		--print("-- Drawing card from player's deck: " .. drawnCard.name)
-
+		print("-- Drawing card from player's deck: " .. drawnCard.name)
 		local cardProperties = { name = hash(drawnCard.name) }
-		--print("-- Card properties: ")
-		--pprint(cardProperties)
 
-		factory.create("#factory", nil, nil, cardProperties)
+		-- Modify the x-coordinate for the player's hand display
+		local p = go.get_position()
+		p.x = p.x + 100
+
+		factory.create("#factory", p, nil, cardProperties)
 	else
 		print("-- No cards left in the player's deck.")
 	end
+
+	-- Print the player's hand
+	print("-- Player's hand:")
+
+	for _, card in ipairs(currentPlayer.hand) do
+		print("-- Card in hand: " .. card.name)
+	end
 end
+
 
 function ai_turn(self)
 	print("--------------------")
@@ -48,6 +60,15 @@ function ai_turn(self)
 	else
 		print("-- No cards left in the ai's deck.")
 	end
+	-- Print ai's hand
+	print("-- Player's hand:")
+
+	for _, card in ipairs(ai.hand) do
+		print("-- Card in ai's hand: " .. card.name)
+	end
+
+
+	
 	rounds = rounds + 1
 	print("-- ai's turn ends")
 	print("")
@@ -59,7 +80,6 @@ function on_message(self, message_id, message, sender)
 		-- Handle the message indicating the turn has ended
 		print("-- Player's turn has ended.")
 		-- Add your logic here to respond to the end of the turn
-		print("")
 		ai_turn(self)
 	end
 end

@@ -6,7 +6,6 @@ go.property("name", hash(""))
 function init(self)
 	-- Initialization code here
 	msg.post("#sprite", "play_animation", { id = self.name })
-	print(self.name)
 
 	-- Set the initial position
 	local p = go.get_position()
