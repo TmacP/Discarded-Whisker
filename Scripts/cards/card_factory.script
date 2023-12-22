@@ -25,22 +25,31 @@ end
 function player_turn(self)
 	print("-------------------- ROUND " .. tostring(rounds))
 	print("-- player's turn begins")
-	
+
 	-- player draws card from their deck into their hand
 	local drawnCard = playerModule.drawCard(currentPlayer)
 
-	if drawnCard then	
+	if drawnCard then    
 		print("-- Drawing card from player's deck: " .. drawnCard.name)
 		local cardProperties = { name = hash(drawnCard.name) }
 
-		-- Modify the x-coordinate for the player's hand display
-		local p = go.get_position()
-		p.x = x -- Set the desired x-coordinate
-		p.y = y -- Set the desired y-coordinate
-		factory.create("#factory", p, nil, cardProperties)
-		-- Set the initial position
-		go.set_position(p)
-		x = x + 35
+		-- Set the initial position for the card at the deck
+		local deckPosition = go.get_position()
+		deckPosition.x = 20
+		deckPosition.y = 29
+		local cardObject = factory.create("#factory", deckPosition, nil, cardProperties)
+
+		-- Set the final position for the card at the player's hand
+		local playerHandPosition = go.get_position()
+		playerHandPosition.x = x
+		playerHandPosition.y = y
+
+		-- Tween the card from the deck to the player's hand
+		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 1, 0, function()
+			-- Callback function when the tween is complete
+			-- You can add any additional logic here
+			x = x + 35
+		end)
 
 	else
 		print("-- No cards left in the player's deck.")
@@ -57,7 +66,11 @@ function player_turn(self)
 		hand = hand .. " " .. card.name
 	end
 	print(hand)
+
+	-- now the player gets to play a card from their hand
+
 end
+
 
 
 function ai_turn(self)
