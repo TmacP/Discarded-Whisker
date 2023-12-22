@@ -19,3 +19,6 @@ dependencies#0 = https://github.com/britzl/defold-input/archive/master.zip
 default_texture_mag_filter = nearest
 default_texture_min_filter = nearest
 
+[physics]
+debug = 0
+

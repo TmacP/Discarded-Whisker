@@ -3,9 +3,13 @@ function init(self)
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("touch") and action.pressed then 
+	if action_id == hash("touch") and action.pressed then
+		-- Check if the touch event occurred on the "end_turn" button
 		local button = gui.get_node("end_turn")
-		-- tell the card_factory.script turn is ended
-		msg.post("/factory#card_factory", "end_turn_message")
+		if gui.pick_node(button, action.x, action.y) then
+			-- The touch event occurred on the "end_turn" button
+			-- Tell the card_factory.script that the turn is ended
+			msg.post("/factory#card_factory", "end_turn_message")
+		end
 	end
 end
