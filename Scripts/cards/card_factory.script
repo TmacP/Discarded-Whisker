@@ -5,15 +5,19 @@ local playerModule = require "Scripts.player"
 
 local rounds = 1
 local y = 29
-local x = 20
-
+local x = 55
+local card_object = nil
 
 local currentPlayer = playerModule.create()  -- Create a player instance
 local ai = playerModule.create() -- create an ai opponent
 
 function init(self)
 	player_turn(self)
-	-- draw the back of players deck to show the deck TODO
+	-- show the deck of cards
+	local p_deck = go.get_position()
+	p_deck.x = 20 -- Set the desired x-coordinate
+	p_deck.y = 29 -- Set the desired y-coordinate
+	card_object = factory.create("#factory", p_deck, nil, {name = hash("Deck")})
 end
 
 
@@ -25,7 +29,7 @@ function player_turn(self)
 	-- player draws card from their deck into their hand
 	local drawnCard = playerModule.drawCard(currentPlayer)
 
-	if drawnCard then
+	if drawnCard then	
 		print("-- Drawing card from player's deck: " .. drawnCard.name)
 		local cardProperties = { name = hash(drawnCard.name) }
 
@@ -36,10 +40,15 @@ function player_turn(self)
 		factory.create("#factory", p, nil, cardProperties)
 		-- Set the initial position
 		go.set_position(p)
-		x = x + 10
+		x = x + 35
 
 	else
 		print("-- No cards left in the player's deck.")
+	end
+
+	-- if deck is empty remove it
+	if #currentPlayer.deck == 0 then
+		go.delete(card_object)
 	end
 
 	-- Print the player's hand
