@@ -3,6 +3,17 @@ local cursor = require "in.cursor"
 
 go.property("name", hash(""))
 
+local function shake(self)
+	go.cancel_animations(".", "scale.x")
+	go.cancel_animations(".", "scale.y")
+	go.set_scale(self.initial_scale)
+	local scale = go.get_scale()
+	go.set_scale(scale * 1.2)
+	go.animate(".", "scale.x", go.PLAYBACK_ONCE_FORWARD, scale.x, go.EASING_OUTELASTIC, 0.8)
+	go.animate(".", "scale.y", go.PLAYBACK_ONCE_FORWARD, scale.y, go.EASING_OUTELASTIC, 0.8, 0, function()
+		go.set_scale(self.initial_scale)
+	end)
+end
 
 function init(self)
 	-- Initialization code here
@@ -24,3 +35,4 @@ function on_message(self, message_id, message, sender)
 		shake(self)
 	end
 end
+

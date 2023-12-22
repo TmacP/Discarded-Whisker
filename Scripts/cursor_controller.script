@@ -8,7 +8,7 @@ function init(self)
 
 	cursor.listen(msg.url("#cursor"), cursor.DRAG_START, function(message_id, message)
 		print("Drag start")
-		-- prevent dragging of blue aliens
+		-- prevent dragging of deck and discard TODO
 		if message.group == hash("blue") then
 			print("Prevent drag on blue")
 			return true
@@ -26,9 +26,17 @@ function on_message(self, message_id, message, sender)
 	if message_id == cursor.OVER then
 		print("Cursor over", message.id, message.group, message.x, message.y)
 		label.set_text("info#events", "Cursor over")
+		-- track if above a dropzone
+		if message.group == hash("playzone") then
+			self.over_playzone = true
+		end
 	elseif message_id == cursor.OUT then
 		print("Cursor out", message.id, message.group, message.x, message.y)
 		label.set_text("info#events", "Cursor out")
+		-- track if moving outside dropzone
+		if message.group == hash("playzone") then
+			self.over_playzone = false
+		end
 	elseif message_id == cursor.PRESSED then
 		print("Pressed", message.id, message.group, message.x, message.y)
 		label.set_text("info#events", "Pressed")
@@ -47,6 +55,10 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == cursor.DRAG_END then
 		print("Drag ended", message.id, message.group, message.x, message.y)
 		label.set_text("info#events", "Drag ended")
+		-- delete if drag of card matches playzone
+		if message.group == hash("card") and self.over_playzone then
+			go.delete(message.id)
+		end
 	elseif message_id == cursor.DRAG then
 		print("Drag", message.id, message.group, message.x, message.y, message.dx, message.dy)
 	end

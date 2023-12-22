@@ -18,6 +18,21 @@ components {
     type: PROPERTY_TYPE_HASH
   }
 }
+components {
+  id: "cursor_controller"
+  component: "/Scripts/cursor_controller.script"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
 embedded_components {
   id: "collisionobject"
   type: "collisionobject"
@@ -28,6 +43,7 @@ embedded_components {
   "restitution: 0.5\n"
   "group: \"cursor\"\n"
   "mask: \"card\"\n"
+  "mask: \"playzone\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"
