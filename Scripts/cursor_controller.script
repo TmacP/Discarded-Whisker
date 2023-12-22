@@ -1,5 +1,7 @@
 local cursor = require "in.cursor"
 
+local debug = false
+
 function init(self)
 	if not go.get("#cursor", "acquire_input_focus") then
 		self.forward_input = true
@@ -7,7 +9,7 @@ function init(self)
 	end
 
 	cursor.listen(msg.url("#cursor"), cursor.DRAG_START, function(message_id, message)
-		print("Drag start")
+		if debug then print("Drag start") end
 		-- prevent dragging of deck and discard TODO
 		if message.group == hash("blue") then
 			print("Prevent drag on blue")
@@ -24,42 +26,35 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == cursor.OVER then
-		print("Cursor over", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Cursor over")
+		if debug then print("Cursor over", message.id, message.group, message.x, message.y) end
 		-- track if above a dropzone
 		if message.group == hash("playzone") then
 			self.over_playzone = true
 		end
 	elseif message_id == cursor.OUT then
-		print("Cursor out", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Cursor out")
+		if debug then print("Cursor out", message.id, message.group, message.x, message.y) end
 		-- track if moving outside dropzone
 		if message.group == hash("playzone") then
 			self.over_playzone = false
 		end
 	elseif message_id == cursor.PRESSED then
-		print("Pressed", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Pressed")
+		if debug then print("Pressed", message.id, message.group, message.x, message.y) end
 	elseif message_id == cursor.RELEASED then
-		print("Released", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Released")
+		if debug then  print("Released", message.id, message.group, message.x, message.y) end
 	elseif message_id == cursor.CLICKED then
-		print("Clicked", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Clicked")
+		if debug then print("Clicked", message.id, message.group, message.x, message.y) end
 		if message.group == hash("blue") then
 			go.delete(message.id)
 		end
 	elseif message_id == cursor.DRAG_START then
-		print("Drag started", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Drag started")
+		if debug then print("Drag started", message.id, message.group, message.x, message.y) end
 	elseif message_id == cursor.DRAG_END then
-		print("Drag ended", message.id, message.group, message.x, message.y)
-		label.set_text("info#events", "Drag ended")
+		if debug then print("Drag ended", message.id, message.group, message.x, message.y) end
 		-- delete if drag of card matches playzone
 		if message.group == hash("card") and self.over_playzone then
 			go.delete(message.id)
 		end
 	elseif message_id == cursor.DRAG then
-		print("Drag", message.id, message.group, message.x, message.y, message.dx, message.dy)
+		if debug then print("Drag", message.id, message.group, message.x, message.y, message.dx, message.dy) end
 	end
 end
