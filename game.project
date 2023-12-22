@@ -13,6 +13,7 @@ input_method = HiddenInputField
 
 [project]
 title = Discarded Whisker
+dependencies#0 = https://github.com/britzl/defold-input/archive/master.zip
 
 [graphics]
 default_texture_mag_filter = nearest

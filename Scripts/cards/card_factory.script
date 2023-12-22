@@ -48,9 +48,9 @@ function player_turn(self)
 		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 1, 0, function()
 			-- Callback function when the tween is complete
 			-- You can add any additional logic here
-			x = x + 35
+		
 		end)
-
+		x = x + 35
 	else
 		print("-- No cards left in the player's deck.")
 	end

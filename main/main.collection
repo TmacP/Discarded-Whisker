@@ -39,6 +39,39 @@ instances {
     z: 1.0
   }
 }
+instances {
+  id: "cursor"
+  prototype: "/gui/cursor.go"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  component_properties {
+    id: "cursor"
+    properties {
+      id: "action_id"
+      value: "touch"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "acquire_input_focus"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 collection_instances {
   id: "board"
   collection: "/Assets/Board/board.collection"
