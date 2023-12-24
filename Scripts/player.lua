@@ -10,7 +10,8 @@ function player.create()
 			{ name = "RedFox" }, 
 			{ name = "Chest" },
 		},
-		hand = {}
+		hand = {},
+		discard = {}
 	}
 	return newPlayer
 end

@@ -52,7 +52,9 @@ function on_message(self, message_id, message, sender)
 		if debug then print("Drag ended", message.id, message.group, message.x, message.y) end
 		-- delete if drag of card matches playzone
 		if message.group == hash("card") and self.over_playzone then
-			go.delete(message.id)
+			--go.delete(message.id)
+			-- Tell the card_factory.script that the card is over playzone
+			msg.post("/factory#card_factory", "play_card", { hash(message.id)})
 		end
 	elseif message_id == cursor.DRAG then
 		if debug then print("Drag", message.id, message.group, message.x, message.y, message.dx, message.dy) end
