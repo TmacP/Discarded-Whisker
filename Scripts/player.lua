@@ -38,4 +38,29 @@ function player.drawCard(player)
 	end
 end
 
+function player.playCard(player, card)
+	-- Find the index of the card in the hand
+	local indexToRemove
+	for i, c in ipairs(player.hand) do
+		if c.name == card then
+			indexToRemove = i
+			break
+		end
+	end
+
+	-- Remove the card from the hand and add it to the discard pile
+	if indexToRemove then
+		table.remove(player.hand, indexToRemove)
+		table.insert(player.discard, card)
+		print("card removed from hand, put into discard")
+		print("hand")
+		pprint(player.hand)
+		print("discard")
+		pprint(player.discard)
+	else
+		print("Card not found in hand.")
+	end
+end
+
+
 return player

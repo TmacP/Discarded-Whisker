@@ -3,6 +3,8 @@
 local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
 
+local spawned_cards = {}
+
 local rounds = 1
 local y = 29
 local x = 55
@@ -37,8 +39,13 @@ function player_turn(self)
 		local deckPosition = go.get_position()
 		deckPosition.x = 20
 		deckPosition.y = 29
+		
 		local cardObject = factory.create("#factory", deckPosition, nil, cardProperties)
 
+
+		table.insert(spawned_cards, {[cardObject] = drawnCard.name})
+
+		
 		-- Set the final position for the card at the player's hand
 		local playerHandPosition = go.get_position()
 		playerHandPosition.x = x
@@ -105,9 +112,17 @@ function on_message(self, message_id, message, sender)
 		ai_turn(self)
 		-- if the cursor sends the play card message we play the card and delete it
 	elseif message_id == hash("play_card") then
-		go.delete(message)
-		-- add it to players discard pile
-		currentPlayer.discard
-	end
-	
+		for message_id, card_info in pairs(spawned_cards) do
+			--print("Message ID:", message_id)
+			for card_key, card_value in pairs(card_info) do
+				--print(card_key, "=", card_value)
+				--print(card_key)
+				--print(message[1])
+				if message[1] == card_key then
+					playerModule.playCard(currentPlayer, card_value)
+					go.delete(message)
+				end
+			end
+		end	
+	end	
 end
