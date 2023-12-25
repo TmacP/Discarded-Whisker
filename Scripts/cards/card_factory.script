@@ -52,7 +52,7 @@ function player_turn(self)
 		playerHandPosition.y = y
 
 		-- Tween the card from the deck to the player's hand
-		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 1, 0, function()
+		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 0.5, 0, function()
 			-- Callback function when the tween is complete
 			-- You can add any additional logic here
 		end)
@@ -127,7 +127,6 @@ function on_message(self, message_id, message, sender)
 		ai_turn(self)
 	end
 
-
 	
 		-- if the cursor sends the play card message we play the card and delete it
 	if message_id == hash("play_card") then
@@ -138,10 +137,26 @@ function on_message(self, message_id, message, sender)
 				--print(card_key)
 				--print(message[1])
 				if message[1] == card_key then
+
+					-- 
 					playerModule.playCard(currentPlayer, card_value)
+					-- put the element on the playboard
+					print("value" .. card_value)
+					element(card_value)
 					go.delete(message)
 				end
 			end
 		end
 	end
+end
+
+
+
+function element(name)
+	print("name of elemenet" .. name )	
+	local cardProperties = { name = hash(name) }
+	local p = go.get_position()
+	p.x = 70 -- Set the desired x-coordinate
+	p.y = 99 -- Set the desired y-coordinate
+	factory.create("#element_factory", p, nil, cardProperties )
 end

@@ -38,6 +38,8 @@ function player.drawCard(player)
 	end
 end
 
+
+
 function player.playCard(player, card)
 	-- Find the index of the card in the hand
 	local indexToRemove
@@ -48,19 +50,17 @@ function player.playCard(player, card)
 		end
 	end
 
+
+
 	-- Remove the card from the hand and add it to the discard pile
 	if indexToRemove then
 		table.remove(player.hand, indexToRemove)
 		table.insert(player.discard, {name = card})
-		--print("card removed from hand, put into discard")
-		--print("hand")
-		--pprint(player.hand)
-		--print("discard")
-		--pprint(player.discard)
 	else
 		print("Card not found in hand.")
 	end
 end
+
 
 -- Fisher-Yates shuffle algorithm
 local function shuffleDeck(deck)
