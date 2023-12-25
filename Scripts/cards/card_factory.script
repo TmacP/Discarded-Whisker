@@ -3,7 +3,7 @@
 local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
 
-local spawned_cards = {}
+local spawned_cards = {} -- keep track of what the factory creates
 
 local rounds = 1
 local y = 29
@@ -12,6 +12,8 @@ local card_object = nil
 
 local currentPlayer = playerModule.create()  -- Create a player instance
 local ai = playerModule.create() -- create an ai opponent
+
+local original_position = vmath.vector3()
 
 function init(self)
 	player_turn(self)
@@ -41,11 +43,9 @@ function player_turn(self)
 		deckPosition.y = 29
 		
 		local cardObject = factory.create("#factory", deckPosition, nil, cardProperties)
-
-
+		
 		table.insert(spawned_cards, {[cardObject] = drawnCard.name})
 
-		
 		-- Set the final position for the card at the player's hand
 		local playerHandPosition = go.get_position()
 		playerHandPosition.x = x
@@ -55,16 +55,21 @@ function player_turn(self)
 		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 1, 0, function()
 			-- Callback function when the tween is complete
 			-- You can add any additional logic here
-		
 		end)
 		x = x + 35
 	else
 		print("-- No cards left in the player's deck.")
 	end
 
-	-- if deck is empty remove it
+	print("-- if deck is empty remove it")
 	if #currentPlayer.deck == 0 then
-		go.delete(card_object)
+		print("player deck is " .. #currentPlayer.deck)
+		-- Store the original position before moving off-screen
+		original_position = go.get_position(card_object)
+		-- Move the card object off-screen to make it invisible
+		go.set_position(vmath.vector3(10000, 10000, 0), card_object)
+		
+
 	end
 
 	-- Print the player's hand
@@ -83,7 +88,7 @@ end
 function ai_turn(self)
 	print("--------------------")
 	print("-- ai's turn begins")
-	local drawnCard = playerModule.drawCard(ai)
+	--[[local drawnCard = playerModule.drawCard(ai)
 
 	if drawnCard then
 		print("-- Drawing card from ai's deck: " .. drawnCard.name)
@@ -96,7 +101,7 @@ function ai_turn(self)
 		hand = hand .. " " .. card.name
 	end
 	print(hand)
-
+	--]]
 	
 	rounds = rounds + 1
 	print("-- ai's turn ends")
@@ -107,11 +112,25 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("end_turn_message") then
 		-- Handle the message indicating the turn has ended
-		print("-- Player's turn has ended.")
+		print("-- Player's turn has ended.")        
+
+		-- Separate if statement for handling "new_deck" message
+		if #currentPlayer.deck == 0 then
+			print("new")
+			-- if players deck is empty if so then shuffle discard and move to deck.
+			playerModule.newDeck(currentPlayer)
+			print("after newDeck " .. #currentPlayer.deck)
+			-- Restore the original position to make the card object visible
+			go.set_position(original_position, card_object)
+		end
 		-- after player it is ai's turn
 		ai_turn(self)
+	end
+
+
+	
 		-- if the cursor sends the play card message we play the card and delete it
-	elseif message_id == hash("play_card") then
+	if message_id == hash("play_card") then
 		for message_id, card_info in pairs(spawned_cards) do
 			--print("Message ID:", message_id)
 			for card_key, card_value in pairs(card_info) do
@@ -123,6 +142,6 @@ function on_message(self, message_id, message, sender)
 					go.delete(message)
 				end
 			end
-		end	
-	end	
+		end
+	end
 end

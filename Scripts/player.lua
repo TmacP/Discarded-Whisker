@@ -51,16 +51,40 @@ function player.playCard(player, card)
 	-- Remove the card from the hand and add it to the discard pile
 	if indexToRemove then
 		table.remove(player.hand, indexToRemove)
-		table.insert(player.discard, card)
-		print("card removed from hand, put into discard")
-		print("hand")
-		pprint(player.hand)
-		print("discard")
-		pprint(player.discard)
+		table.insert(player.discard, {name = card})
+		--print("card removed from hand, put into discard")
+		--print("hand")
+		--pprint(player.hand)
+		--print("discard")
+		--pprint(player.discard)
 	else
 		print("Card not found in hand.")
 	end
 end
 
+-- Fisher-Yates shuffle algorithm
+local function shuffleDeck(deck)
+	local n = #deck
+	for i = n, 2, -1 do
+		local j = math.random(i)
+		deck[i], deck[j] = deck[j], deck[i]
+	end
+	print("shuffled deck")
+end
+
+function player.newDeck(player)
+	-- Take all the cards out of the player.discard and add them to player.deck
+	for _, card in ipairs(player.discard) do
+		--print("card in discard: " .. card)
+		table.insert(player.deck, card)
+	end
+	-- Clear the discard pile
+	player.discard = {}
+	-- Shuffle the deck
+	shuffleDeck(player.deck)
+	msg.post("/factory#card_factory", "new_deck")
+	-- Return the updated player table
+	return player -- not sure i need this
+end
 
 return player
