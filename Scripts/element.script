@@ -2,8 +2,33 @@
 
 go.property("name", hash(""))
 go.property("flip", false)
+go.property("team", hash(""))
+go.property("position", 1)
 
 function init(self)
 	msg.post("#sprite", "play_animation", { id = self.name })
 	sprite.set_hflip("#sprite", self.flip)
+	local p = go.get_position()
+
+	p.y = 99 -- Set the desired y-coordinate
+
+	if self.team == hash("player") then
+		if self.position == 1 then
+			p.x = 125
+		elseif self.position == 2 then
+			p.x = 90
+		elseif self.position == 3 then
+			p.x = 55
+		end
+	elseif self.team == hash("ai") then
+		if self.position == 1 then
+			p.x = 195
+		elseif self.position == 2 then
+			p.x = 230
+		elseif self.position == 3 then
+			p.x = 265
+		end
+	end
+
+	go.set_position(p, "#sprite")
 end

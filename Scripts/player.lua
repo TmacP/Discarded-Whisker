@@ -1,4 +1,5 @@
 -- player.lua
+local debug = false
 
 local player = {}
 
@@ -14,7 +15,7 @@ function player.create()
 		-- they draw cards from the deck into their hand
 		hand = {}, 
 		-- they play cards from their hand into their playzone
-		playzone = {nil, nil, nil},
+		playzone = {},
 		-- elements get discarded when they are beaten off the playzone
 		discard = {}
 	}
@@ -57,7 +58,7 @@ function player.playCard(player, card)
 		table.remove(player.hand, indexToRemove)
 		table.insert(player.playzone, {name = card})
 	else
-		print("Card not found in hand.")
+		if debug then print("Card not found in hand.") end
 	end
 end
 

@@ -1,5 +1,8 @@
 -- card_factory.script
 
+local debugPlayer = false
+local debugAi = true
+
 local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
 
@@ -28,13 +31,13 @@ end
 
 function player_turn(self)
 	print("-------------------- ROUND " .. tostring(rounds))
-	print("-- player's turn begins")
+	if debugPlayer then print("-- player's turn begins") end
 
 	-- player draws card from their deck into their hand
 	local drawnCard = playerModule.drawCard(currentPlayer)
 
 	if drawnCard then    
-		print("-- Drawing card from player's deck: " .. drawnCard.name)
+		if debugPlayer then print("-- Drawing card from player's deck: " .. drawnCard.name) end
 		local cardProperties = { name = hash(drawnCard.name) }
 
 		-- Set the initial position for the card at the deck
@@ -58,12 +61,12 @@ function player_turn(self)
 		end)
 		x = x + 35
 	else
-		print("-- No cards left in the player's deck. Or hand has 7 cards")
+		if debugPlayer then print("-- No cards left in the player's deck. Or hand has 7 cards") end
 	end
 
-	print("-- if deck is empty remove it")
+	if debugPlayer then print("-- if deck is empty remove it") end
 	if #currentPlayer.deck == 0 then
-		print("player deck is " .. #currentPlayer.deck)
+		if debugPlayer then print("player deck is " .. #currentPlayer.deck) end
 		-- Store the original position before moving off-screen
 		original_position = go.get_position(card_object)
 		-- Move the card object off-screen to make it invisible
@@ -73,11 +76,13 @@ function player_turn(self)
 	end
 
 	-- Print the player's hand
-	local hand = "-- Player's hand:"
-	for _, card in ipairs(currentPlayer.hand) do
-		hand = hand .. " " .. card.name
+	if debugPlayer then
+		local hand = "-- Player's hand:"
+		for _, card in ipairs(currentPlayer.hand) do
+			hand = hand .. " " .. card.name
+		end
+		print(hand)
 	end
-	print(hand)
 
 	-- now the player gets to play a card from their hand
 
@@ -95,10 +100,12 @@ function ai_turn(self)
 
 		-- AI plays the first card from its hand into playzone
 		local aiCard = table.remove(ai.hand, 1)
+		table.insert(ai.playzone, aiCard)
 		if aiCard then
 			playerModule.playCard(ai, aiCard.name)
-			element(aiCard.name, true)  -- Create the corresponding element
-		end
+			print("ai playzone " .. #ai.playzone)
+			element(aiCard.name, true, "ai", #ai.playzone)  -- Create the corresponding element
+	end
 	else
 		print("-- No cards left in the ai's deck.")
 	end
@@ -141,9 +148,11 @@ function on_message(self, message_id, message, sender)
 				if message[1] == card_key then
 					-- player plays card if they have room on playzone MAX 3 elements at time
 					if #currentPlayer.playzone < 3 then
-					playerModule.playCard(currentPlayer, card_value)
+
+						playerModule.playCard(currentPlayer, card_value)
+						print("playzone" .. #currentPlayer.playzone)
 					-- put the element on the playboard
-					element(card_value, false)
+					element(card_value, false, "player", #currentPlayer.playzone)
 					-- delete the card
 					go.delete(message)
 					end
@@ -155,11 +164,8 @@ end
 
 
 
-function element(name, flip)
+function element(name, flip, team, position)
 	print("name of elemenet" .. name )	
-	local cardProperties = { name = hash(name), flip = flip }
-	local p = go.get_position()
-	p.x = 70 -- Set the desired x-coordinate
-	p.y = 99 -- Set the desired y-coordinate
-	factory.create("#element_factory", p, nil, cardProperties )
+	local cardProperties = { name = hash(name), flip = flip, team = hash(team), position = position }
+	factory.create("#element_factory", nil, nil, cardProperties )
 end
