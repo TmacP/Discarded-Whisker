@@ -58,7 +58,7 @@ function player_turn(self)
 		end)
 		x = x + 35
 	else
-		print("-- No cards left in the player's deck.")
+		print("-- No cards left in the player's deck. Or hand has 7 cards")
 	end
 
 	print("-- if deck is empty remove it")
@@ -88,24 +88,25 @@ end
 function ai_turn(self)
 	print("--------------------")
 	print("-- ai's turn begins")
-	--[[local drawnCard = playerModule.drawCard(ai)
+	local drawnCard = playerModule.drawCard(ai)
 
 	if drawnCard then
 		print("-- Drawing card from ai's deck: " .. drawnCard.name)
+
+		-- AI plays the first card from its hand into playzone
+		local aiCard = table.remove(ai.hand, 1)
+		if aiCard then
+			playerModule.playCard(ai, aiCard.name)
+			element(aiCard.name, true)  -- Create the corresponding element
+		end
 	else
 		print("-- No cards left in the ai's deck.")
 	end
-	-- Print the player's hand
-	local hand = "-- ai's hand:"
-	for _, card in ipairs(ai.hand) do
-		hand = hand .. " " .. card.name
-	end
-	print(hand)
-	--]]
-	
+
 	rounds = rounds + 1
 	print("-- ai's turn ends")
 	print("")
+	print("move in battle now")
 	player_turn(self)
 end
 
@@ -122,6 +123,7 @@ function on_message(self, message_id, message, sender)
 			print("after newDeck " .. #currentPlayer.deck)
 			-- Restore the original position to make the card object visible
 			go.set_position(original_position, card_object)
+			x = 55
 		end
 		-- after player it is ai's turn
 		ai_turn(self)
@@ -137,13 +139,14 @@ function on_message(self, message_id, message, sender)
 				--print(card_key)
 				--print(message[1])
 				if message[1] == card_key then
-
-					-- 
+					-- player plays card if they have room on playzone MAX 3 elements at time
+					if #currentPlayer.playzone < 3 then
 					playerModule.playCard(currentPlayer, card_value)
 					-- put the element on the playboard
-					print("value" .. card_value)
-					element(card_value)
+					element(card_value, false)
+					-- delete the card
 					go.delete(message)
+					end
 				end
 			end
 		end
@@ -152,9 +155,9 @@ end
 
 
 
-function element(name)
+function element(name, flip)
 	print("name of elemenet" .. name )	
-	local cardProperties = { name = hash(name) }
+	local cardProperties = { name = hash(name), flip = flip }
 	local p = go.get_position()
 	p.x = 70 -- Set the desired x-coordinate
 	p.y = 99 -- Set the desired y-coordinate

@@ -1,6 +1,9 @@
+-- element.script
 
 go.property("name", hash(""))
+go.property("flip", false)
 
 function init(self)
 	msg.post("#sprite", "play_animation", { id = self.name })
+	sprite.set_hflip("#sprite", self.flip)
 end

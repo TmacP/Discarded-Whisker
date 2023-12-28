@@ -4,13 +4,18 @@ local player = {}
 
 function player.create()
 	local newPlayer = {
+		-- the cards in the players deck
 		deck = {
-			{ name = "SeaHorse" },
-			{ name = "Deer" },
-			{ name = "RedFox" }, 
-			{ name = "Chest" },
+			{ name = "SeaHorse"},
+			{ name = "Deer"},
+			{ name = "RedFox"},
+			--{ name = "Chest" },
 		},
-		hand = {},
+		-- they draw cards from the deck into their hand
+		hand = {}, 
+		-- they play cards from their hand into their playzone
+		playzone = {nil, nil, nil},
+		-- elements get discarded when they are beaten off the playzone
 		discard = {}
 	}
 	return newPlayer
@@ -19,7 +24,7 @@ end
 function player.drawCard(player)
 	math.randomseed(os.time()) -- set the seed to make non deterministic
 
-	if #player.deck > 0 then
+	if #player.deck > 0 and #player.hand < 7 then
 		local randomIndex = math.random(1, #player.deck)
 		
 		-- pop a few random off to keep it random
@@ -38,8 +43,6 @@ function player.drawCard(player)
 	end
 end
 
-
-
 function player.playCard(player, card)
 	-- Find the index of the card in the hand
 	local indexToRemove
@@ -49,13 +52,10 @@ function player.playCard(player, card)
 			break
 		end
 	end
-
-
-
 	-- Remove the card from the hand and add it to the discard pile
 	if indexToRemove then
 		table.remove(player.hand, indexToRemove)
-		table.insert(player.discard, {name = card})
+		table.insert(player.playzone, {name = card})
 	else
 		print("Card not found in hand.")
 	end

@@ -7,6 +7,7 @@ shared_state = 1
 [display]
 width = 320
 height = 180
+fullscreen = 0
 
 [android]
 input_method = HiddenInputField
@@ -21,4 +22,7 @@ default_texture_min_filter = nearest
 
 [physics]
 debug = 0
+
+[render]
+clear_color_red = 0.0
 
