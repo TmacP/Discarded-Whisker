@@ -1,7 +1,8 @@
 -- card_factory.script
 
 local debugPlayer = false
-local debugAi = true
+local debugAi = false
+local debugBattle = true
 
 local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
@@ -91,43 +92,74 @@ end
 
 
 function ai_turn(self)
-	print("--------------------")
-	print("-- ai's turn begins")
+	if debugAi then print("--------------------") end
+	if debugAi then print("-- ai's turn begins") end
 	local drawnCard = playerModule.drawCard(ai)
 
 	if drawnCard then
-		print("-- Drawing card from ai's deck: " .. drawnCard.name)
+		if debugAi then print("-- Drawing card from ai's deck: " .. drawnCard.name) end
 
 		-- AI plays the first card from its hand into playzone
 		local aiCard = table.remove(ai.hand, 1)
 		table.insert(ai.playzone, aiCard)
 		if aiCard then
 			playerModule.playCard(ai, aiCard.name)
-			print("ai playzone " .. #ai.playzone)
+			if debugAi then print("ai playzone " .. #ai.playzone) end
 			element(aiCard.name, true, "ai", #ai.playzone)  -- Create the corresponding element
 	end
 	else
-		print("-- No cards left in the ai's deck.")
+		if debugAi then print("-- No cards left in the ai's deck.") end 
 	end
 
 	rounds = rounds + 1
-	print("-- ai's turn ends")
-	print("")
-	print("move in battle now")
+	 if debugAi then print("-- ai's turn ends") end
+	if debugAi then print("") end
+
+	battle(self)
+end
+
+function battle(self)
+	if debugBattle then print("-- battle phase begins") end
+	
+	if debugBattle then print("-- check if the playzones have elements in them") end
+
+	if #currentPlayer.playzone > 0 and #ai.playzone > 0 then
+		if debugBattle then print("-- player playzone " .. #currentPlayer.playzone) end
+		if debugBattle then print("-- ai playzone " .. #ai.playzone) end
+		
+		if debugBattle then print("-- for each playzone element compare against eachother") end
+
+		--[[for i = 1, #currentPlayer.playzone do
+			local playerCard = currentPlayer.playzone[i]
+			if debugBattle then print("player card " .. playerCard.name) end
+		end
+
+		for i = 1, #ai.playzone do
+			local aiCard = ai.playzone[i]
+			if debugBattle then print("ai card " .. aiCard.name) end
+		end--]]
+
+		-- compare the cards in playzone
+		-- the first elements attack
+		
+
+	end
+
+	-- end battle so new round begins
 	player_turn(self)
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("end_turn_message") then
 		-- Handle the message indicating the turn has ended
-		print("-- Player's turn has ended.")        
+		if debugPlayer then print("-- Player's turn has ended.") end
 
 		-- Separate if statement for handling "new_deck" message
 		if #currentPlayer.deck == 0 then
-			print("new")
+			if debugPlayer then print("new") end
 			-- if players deck is empty if so then shuffle discard and move to deck.
 			playerModule.newDeck(currentPlayer)
-			print("after newDeck " .. #currentPlayer.deck)
+			if debugPlayer then print("after newDeck " .. #currentPlayer.deck) end
 			-- Restore the original position to make the card object visible
 			go.set_position(original_position, card_object)
 			x = 55
@@ -150,7 +182,7 @@ function on_message(self, message_id, message, sender)
 					if #currentPlayer.playzone < 3 then
 
 						playerModule.playCard(currentPlayer, card_value)
-						print("playzone" .. #currentPlayer.playzone)
+						if debugPlayer then print("playzone" .. #currentPlayer.playzone) end 
 					-- put the element on the playboard
 					element(card_value, false, "player", #currentPlayer.playzone)
 					-- delete the card
@@ -165,7 +197,7 @@ end
 
 
 function element(name, flip, team, position)
-	print("name of elemenet" .. name )	
+	--print("name of elemenet" .. name )	
 	local cardProperties = { name = hash(name), flip = flip, team = hash(team), position = position }
 	factory.create("#element_factory", nil, nil, cardProperties )
 end
