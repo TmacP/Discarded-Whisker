@@ -1,13 +1,6 @@
-# Welcome to Defold
+# Welcome to Discarded Whisker
 
-This project was created from the "empty" project template.
+This project was created so I could experiment with using Defold. This is a work in progress still in the prototype phase. The intention is to be a single player, pixel art, card collecting game. 
 
-The settings in ["game.project"](defold://open?path=/game.project) are all the default. A bootstrap empty ["main.collection"](defold://open?path=/main/main.collection) is included.
 
-Check out [the documentation pages](https://defold.com/learn) for examples, tutorials, manuals and API docs.
-
-If you run into trouble, help is available in [our forum](https://forum.defold.com).
-
-Happy Defolding!
-
----# Discarded-Whisker
+Check out my [dev log](https://tristenmacpherson.pages.dev/blog/blog-index) to see what I'm up to.
