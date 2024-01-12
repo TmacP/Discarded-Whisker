@@ -8,6 +8,7 @@ local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
 
 local spawned_cards = {} -- keep track of what the factory creates
+local elements = {} -- keep track of the elements on the board
 
 local rounds = 1
 local y = 29
@@ -129,6 +130,33 @@ function battle(self)
 		
 		if debugBattle then print("-- for each playzone element compare against eachother") end
 
+		for i, v in pairs(elements) do
+			print("Element:", v)
+
+			for key, value in pairs(v) do
+				print(key, "=", value)
+
+				if key == "Id" then
+					print("found ID")
+					print(value)
+					-- Set the position property y component to 200
+					go.set(value, "position.y", 200)
+					-- Then animate it
+					go.animate(value, "position.y", go.PLAYBACK_ONCE_PINGPONG, 100, go.EASING_OUTBOUNCE, 2)
+				end
+			end
+
+		end
+					
+		
+		
+		if debugBattle then print("--the elements in the first position attack the element in the front.") end
+		if debugBattle then print("-- the elements in the second position attack the element in the front.") end
+		if debugBattle then print("-- the elements in the third position attack the element in the front.") end
+		
+
+		
+
 		--[[for i = 1, #currentPlayer.playzone do
 			local playerCard = currentPlayer.playzone[i]
 			if debugBattle then print("player card " .. playerCard.name) end
@@ -199,5 +227,6 @@ end
 function element(name, flip, team, position)
 	--print("name of elemenet" .. name )	
 	local cardProperties = { name = hash(name), flip = flip, team = hash(team), position = position }
-	factory.create("#element_factory", nil, nil, cardProperties )
+	local id = factory.create("#element_factory", nil, nil, cardProperties )
+	table.insert(elements, {Id = id, Name = name, Team = team, Position = position})
 end
