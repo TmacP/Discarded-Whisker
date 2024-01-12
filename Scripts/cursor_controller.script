@@ -11,8 +11,8 @@ function init(self)
 	cursor.listen(msg.url("#cursor"), cursor.DRAG_START, function(message_id, message)
 		if debug then print("Drag start") end
 		-- prevent dragging of deck and discard TODO
-		if message.group == hash("blue") then
-			print("Prevent drag on blue")
+		if message.group == hash("playzone") then
+			if debug then print("Prevent drag on blue") end
 			return true
 		end
 	end)
