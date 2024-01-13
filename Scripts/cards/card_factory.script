@@ -4,6 +4,8 @@ local debugPlayer = false
 local debugAi = false
 local debugBattle = true
 
+
+
 local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
 
@@ -121,53 +123,41 @@ end
 
 function battle(self)
 	if debugBattle then print("-- battle phase begins") end
-	
 	if debugBattle then print("-- check if the playzones have elements in them") end
-
 	if #currentPlayer.playzone > 0 and #ai.playzone > 0 then
 		if debugBattle then print("-- player playzone " .. #currentPlayer.playzone) end
-		if debugBattle then print("-- ai playzone " .. #ai.playzone) end
-		
+		if debugBattle then print("-- ai playzone " .. #ai.playzone) end	
 		if debugBattle then print("-- for each playzone element compare against eachother") end
-
-		for i, v in pairs(elements) do
-			print("Element:", v)
-
-			for key, value in pairs(v) do
-				print(key, "=", value)
-
-				if key == "Id" then
-					--print("found ID")
-					--print(value)
-					go.animate(value, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75)
+		function animatePlayers(elements, team, position)
+			for i, v in pairs(elements) do
+				print("Element:", i)
+				local object = nil
+				local t = nil
+				local p = nil
+				for key, value in pairs(v) do
+					if key == "Team" and value == team then
+						t = value
+					end
+					if key == "Id" then
+						object = value
+					end
+					if key == "Position" and value == position then
+						p = value
+					end
+				end
+				if p == position and t == team then
+					go.set(object, "position.y", 99)
+					go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75)		
 				end
 			end
-
 		end
-					
-		
-		
-		if debugBattle then print("--the elements in the first position attack the element in the front.") end
+
+		-- Example usage:
+			animatePlayers(elements, "player", 1)
+			animatePlayers(elements, "ai", 1)
+
 		if debugBattle then print("-- the elements in the second position attack the element in the front.") end
 		if debugBattle then print("-- the elements in the third position attack the element in the front.") end
-		
-
-		
-
-		--[[for i = 1, #currentPlayer.playzone do
-			local playerCard = currentPlayer.playzone[i]
-			if debugBattle then print("player card " .. playerCard.name) end
-		end
-
-		for i = 1, #ai.playzone do
-			local aiCard = ai.playzone[i]
-			if debugBattle then print("ai card " .. aiCard.name) end
-		end--]]
-
-		-- compare the cards in playzone
-		-- the first elements attack
-		
-
 	end
 
 	-- end battle so new round begins
@@ -217,6 +207,7 @@ function on_message(self, message_id, message, sender)
 			end
 		end
 	end
+
 end
 
 
@@ -227,3 +218,5 @@ function element(name, flip, team, position)
 	local id = factory.create("#element_factory", nil, nil, cardProperties )
 	table.insert(elements, {Id = id, Name = name, Team = team, Position = position})
 end
+
+
