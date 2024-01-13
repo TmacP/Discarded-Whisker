@@ -10,7 +10,7 @@ function player.create()
 			{ name = "SeaHorse"},
 			{ name = "Deer"},
 			{ name = "RedFox"},
-			{ name = "Chest" },
+			--{ name = "Chest" },
 		},
 		-- they draw cards from the deck into their hand
 		hand = {},

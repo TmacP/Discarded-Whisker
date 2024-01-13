@@ -137,12 +137,9 @@ function battle(self)
 				print(key, "=", value)
 
 				if key == "Id" then
-					print("found ID")
-					print(value)
-					-- Set the position property y component to 200
-					go.set(value, "position.y", 200)
-					-- Then animate it
-					go.animate(value, "position.y", go.PLAYBACK_ONCE_PINGPONG, 100, go.EASING_OUTBOUNCE, 2)
+					--print("found ID")
+					--print(value)
+					go.animate(value, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75)
 				end
 			end
 
