@@ -3,6 +3,7 @@
 local debugPlayer = false
 local debugAi = false
 local debugBattle = true
+local debuganimatePlayers = true
 
 
 
@@ -59,10 +60,7 @@ function player_turn(self)
 		playerHandPosition.y = y
 
 		-- Tween the card from the deck to the player's hand
-		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 0.5, 0, function()
-			-- Callback function when the tween is complete
-			-- You can add any additional logic here
-		end)
+		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 0.5, 0)
 		x = x + 35
 	else
 		if debugPlayer then print("-- No cards left in the player's deck. Or hand has 7 cards") end
@@ -122,22 +120,23 @@ function ai_turn(self)
 end
 
 function battle(self)
+	if debugBattle then print("function battle(self)") end
 	if debugBattle then print("-- battle phase begins") end
 	if debugBattle then print("-- check if the playzones have elements in them") end
 	if #currentPlayer.playzone > 0 and #ai.playzone > 0 then
 		if debugBattle then print("-- player playzone " .. #currentPlayer.playzone) end
 		if debugBattle then print("-- ai playzone " .. #ai.playzone) end	
 		if debugBattle then print("-- for each playzone element compare against eachother") end
-
-		animatePlayers(elements, "player", 1)
+		if debugBattle then print("-- the elements in the first position attack the element in the front.") end
+		animatePlayers(elements, "player", 1)	
 		animatePlayers(elements, "ai", 1)
+		if debugBattle then print("-- the elements in the second position attack the element in the middle.") end
 		animatePlayers(elements, "player", 2)
 		animatePlayers(elements, "ai", 2)
+		if debugBattle then print("-- the elements in the third position attack the element in the back.") end
 		animatePlayers(elements, "player", 3)
 		animatePlayers(elements, "ai", 3)
 
-		if debugBattle then print("-- the elements in the second position attack the element in the front.") end
-		if debugBattle then print("-- the elements in the third position attack the element in the front.") end
 	end
 
 	-- end battle so new round begins
@@ -146,6 +145,7 @@ end
 
 
 function animatePlayers(elements, team, position)
+	if debuganimatePlayers then print("animatePlayers(elements, team, position)") end
 	for i, v in pairs(elements) do
 		local object = nil
 		local t = nil
@@ -162,6 +162,7 @@ function animatePlayers(elements, team, position)
 			end
 		end
 		if p == position and t == team then
+			if debuganimatePlayers then print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object) end
 			go.set(object, "position.y", 99)
 			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, timer.delay(1, false, function() print("print in one second") end))		
 		end
