@@ -119,55 +119,65 @@ function ai_turn(self)
 	battle(self)
 end
 
+
+
+
 function battle(self)
 	if debugBattle then print("function battle(self)") end
 	if debugBattle then print("-- battle phase begins") end
 	if debugBattle then print("-- check if the playzones have elements in them") end
 	if #currentPlayer.playzone > 0 and #ai.playzone > 0 then
-		if debugBattle then print("-- player playzone " .. #currentPlayer.playzone) end
-		if debugBattle then print("-- ai playzone " .. #ai.playzone) end	
-		if debugBattle then print("-- for each playzone element compare against eachother") end
-		if debugBattle then print("-- the elements in the first position attack the element in the front.") end
-		animatePlayers(elements, "player", 1)	
-		animatePlayers(elements, "ai", 1)
-		if debugBattle then print("-- the elements in the second position attack the element in the middle.") end
-		animatePlayers(elements, "player", 2)
-		animatePlayers(elements, "ai", 2)
-		if debugBattle then print("-- the elements in the third position attack the element in the back.") end
-		animatePlayers(elements, "player", 3)
-		animatePlayers(elements, "ai", 3)
-
+		animatePlayers(elements, "player", 1, function()
+			animatePlayers(elements, "ai", 1, function()
+				animatePlayers(elements, "player", 2, function()
+					animatePlayers(elements, "ai", 2, function()
+						animatePlayers(elements, "player", 3, function()
+							animatePlayers(elements, "ai", 3, function()
+								player_turn(self)
+							end)
+						end)
+					end)
+				end)
+			end)
+		end)
 	end
 
-	-- end battle so new round begins
-	player_turn(self)
+
+-- end battle so new round begins
+player_turn(self)
+end
+
+function done()
+timer.delay(1, false, function() print("print in one second") end)
+end
+
+function animatePlayers(elements, team, position, callback)
+for i, v in pairs(elements) do
+	local object = nil
+	local t = nil
+	local p = nil
+	for key, value in pairs(v) do
+		if key == "Team" and value == team then
+			t = value
+		end
+		if key == "Id" then
+			object = value
+		end
+		if key == "Position" and value == position then
+			p = value
+		end
+	end
+	if p == position and t == team then
+		if debuganimatePlayers then
+			print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object)
+		end
+		go.set(object, "position.y", 99)
+		go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, 0, callback)
+	end
+end
 end
 
 
-function animatePlayers(elements, team, position)
-	if debuganimatePlayers then print("animatePlayers(elements, team, position)") end
-	for i, v in pairs(elements) do
-		local object = nil
-		local t = nil
-		local p = nil
-		for key, value in pairs(v) do
-			if key == "Team" and value == team then
-				t = value
-			end
-			if key == "Id" then
-				object = value
-			end
-			if key == "Position" and value == position then
-				p = value
-			end
-		end
-		if p == position and t == team then
-			if debuganimatePlayers then print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object) end
-			go.set(object, "position.y", 99)
-			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, timer.delay(1, false, function() print("print in one second") end))		
-		end
-	end
-end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("end_turn_message") then
