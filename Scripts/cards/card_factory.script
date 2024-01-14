@@ -69,12 +69,7 @@ function player_turn(self)
 	if debugPlayer then print("-- if deck is empty remove it") end
 	if #currentPlayer.deck == 0 then
 		if debugPlayer then print("player deck is " .. #currentPlayer.deck) end
-		-- Store the original position before moving off-screen
-		original_position = go.get_position(card_object)
-		-- Move the card object off-screen to make it invisible
-		go.set_position(vmath.vector3(10000, 10000, 0), card_object)
-		
-
+		go.set_scale(0.01, card_object)
 	end
 
 	-- Print the player's hand
