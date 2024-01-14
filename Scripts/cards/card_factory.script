@@ -124,58 +124,71 @@ end
 
 function battle(self)
 	if debugBattle then print("function battle(self)") end
-	if debugBattle then print("-- battle phase begins") end
-	if debugBattle then print("-- check if the playzones have elements in them") end
-	if #currentPlayer.playzone > 0 and #ai.playzone > 0 then
-		animatePlayers(elements, "player", 1, function()
-			animatePlayers(elements, "ai", 1, function()
-				animatePlayers(elements, "player", 2, function()
-					animatePlayers(elements, "ai", 2, function()
-						animatePlayers(elements, "player", 3, function()
-							animatePlayers(elements, "ai", 3, function()
-								player_turn(self)
-							end)
-						end)
-					end)
-				end)
-			end)
-		end)
-	end
 
+	local animations = {
+		{team = "player", position = 1},
+		{team = "ai", position = 1},
+		{team = "player", position = 2},
+		{team = "ai", position = 2},
+		{team = "player", position = 3},
+		{team = "ai", position = 3},
+	}
 
--- end battle so new round begins
-player_turn(self)
+	-- Start the first animation in the chain
+	playNextAnimation(animations, 1)
 end
 
-function done()
-timer.delay(1, false, function() print("print in one second") end)
+function playNextAnimation(animations, index)
+	if index > #animations then
+		-- All animations are done
+		player_turn(self)
+		return
+	end
+
+	local animation = animations[index]
+	animatePlayers(elements, animation.team, animation.position, function() 
+		-- Callback for the current animation
+		print("Animation complete for team:", animation.team, "position:", animation.position)
+
+		-- Start the next animation in the chain
+		playNextAnimation(animations, index + 1)
+	end)
 end
 
 function animatePlayers(elements, team, position, callback)
-for i, v in pairs(elements) do
-	local object = nil
-	local t = nil
-	local p = nil
-	for key, value in pairs(v) do
-		if key == "Team" and value == team then
-			t = value
+	local found = false
+	for i, v in pairs(elements) do
+		local object = nil
+		local t = nil
+		local p = nil
+		for key, value in pairs(v) do
+			if key == "Team" and value == team then
+				t = value
+			end
+			if key == "Id" then
+				object = value
+			end
+			if key == "Position" and value == position then
+				p = value
+			end
 		end
-		if key == "Id" then
-			object = value
-		end
-		if key == "Position" and value == position then
-			p = value
+		if p == position and t == team and object then
+			found = true
+			if debuganimatePlayers then
+				print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object)
+			end
+			go.set(object, "position.y", 99)
+			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, 0, callback)
+			break -- Exit the loop once a valid animation is found
 		end
 	end
-	if p == position and t == team then
-		if debuganimatePlayers then
-			print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object)
-		end
-		go.set(object, "position.y", 99)
-		go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, 0, callback)
+
+	if not found then
+		-- If no valid animation is found, proceed to the next animation in the chain
+		callback()
 	end
 end
-end
+
 
 
 
