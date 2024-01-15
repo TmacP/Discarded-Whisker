@@ -17,9 +17,24 @@ function player.create()
 		-- they play cards from their hand into their playzone
 		playzone = {},
 		-- elements get discarded when they are beaten off the playzone
-		discard = {}
+		discard = {},
+		health = 20, -- 20 is maxhealth
 	}
 	return newPlayer
+end
+
+function player.takeDamage(player, damage, team)
+	player.health = math.max(player.health - damage, 0)
+	print(player.health)
+	-- Send a message to update the GUI health bar
+	-- if player
+	print(team)
+	if team == "player" then
+	msg.post("gui#player_health", "update_health", { health = player.health })
+	-- if ai
+	elseif team == "ai" then
+		msg.post("gui#ai_health", "update_health", { health = player.health })
+	end
 end
 
 function player.drawCard(player)

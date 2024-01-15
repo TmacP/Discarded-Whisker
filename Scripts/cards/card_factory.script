@@ -172,6 +172,12 @@ function animatePlayers(elements, team, position, callback)
 			if debuganimatePlayers then
 				print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object)
 			end
+			-- Call player.takeDamage here
+			if team == "player" then
+				playerModule.takeDamage(currentPlayer, 1, "ai")  -- Replace damageAmount with the actual damage value
+			elseif team == "ai" then
+				playerModule.takeDamage(ai, 1, "player")  -- Replace damageAmount with the actual damage value
+			end
 			go.set(object, "position.y", 99)
 			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, 0, callback)
 			break -- Exit the loop once a valid animation is found
