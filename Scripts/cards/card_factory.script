@@ -5,7 +5,7 @@ local debugAi = false
 local debugBattle = true
 local debuganimatePlayers = true
 
-
+local players_turn = nil
 
 local card_data = require "Scripts.cards.card_data"
 local playerModule = require "Scripts.player"
@@ -37,6 +37,7 @@ end
 
 
 function player_turn(self)
+
 	print("-------------------- ROUND " .. tostring(rounds))
 	if debugPlayer then print("-- player's turn begins") end
 
@@ -84,12 +85,13 @@ function player_turn(self)
 	end
 
 	-- now the player gets to play a card from their hand
-
+	players_turn = true
 end
 
 
 
 function ai_turn(self)
+	players_turn = false
 	if debugAi then print("--------------------") end
 	if debugAi then print("-- ai's turn begins") end
 	local drawnCard = playerModule.drawCard(ai)
@@ -196,7 +198,7 @@ end
 
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("end_turn_message") then
+	if message_id == hash("end_turn_message")  and players_turn then
 		-- Handle the message indicating the turn has ended
 		if debugPlayer then print("-- Player's turn has ended.") end
 
