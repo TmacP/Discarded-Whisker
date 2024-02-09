@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "factory"
   type: "factory"
-  data: "prototype: \"/main/card.go\"\n"
+  data: "prototype: \"/Collections/card_game/card.go\"\n"
   "load_dynamically: false\n"
   "dynamic_prototype: false\n"
   ""
@@ -35,7 +35,7 @@ embedded_components {
 embedded_components {
   id: "element_factory"
   type: "factory"
-  data: "prototype: \"/main/element.go\"\n"
+  data: "prototype: \"/Collections/card_game/element.go\"\n"
   "load_dynamically: false\n"
   "dynamic_prototype: false\n"
   ""

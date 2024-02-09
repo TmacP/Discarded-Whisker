@@ -24,6 +24,8 @@ local ai = playerModule.create() -- create an ai opponent
 local original_position = vmath.vector3()
 
 function init(self)
+
+	
 	player_turn(self)
 	-- show the deck of cards
 	local p_deck = go.get_position()

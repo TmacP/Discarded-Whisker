@@ -1,6 +1,6 @@
 components {
   id: "end_turn"
-  component: "/gui/end_turn.gui"
+  component: "/Collections/card_game/gui/end_turn.gui"
   position {
     x: 0.0
     y: 0.0
@@ -15,7 +15,7 @@ components {
 }
 components {
   id: "player_health"
-  component: "/gui/player_health.gui"
+  component: "/Collections/card_game/gui/player_health.gui"
   position {
     x: 0.0
     y: 0.0
@@ -30,7 +30,7 @@ components {
 }
 components {
   id: "ai_health"
-  component: "/gui/ai_health.gui"
+  component: "/Collections/card_game/gui/ai_health.gui"
   position {
     x: 0.0
     y: 0.0

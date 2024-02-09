@@ -30,11 +30,23 @@ function player.takeDamage(player, damage, team)
 	-- if player
 	print(team)
 	if team == "player" then
-	msg.post("gui#player_health", "update_health", { health = player.health })
+		msg.post("gui#player_health", "update_health", { health = player.health })
+		-- if player health is zero they lose
+		if player.health == 0 then
+			print("YOU LOSE " .. tostring(team))
+			msg.post("main:/controller#controller", "game_over")
+		end
 	-- if ai
 	elseif team == "ai" then
 		msg.post("gui#ai_health", "update_health", { health = player.health })
+		-- if player health is zero they lose
+		if player.health == 0 then
+			print("YOU LOSE " .. tostring(team))
+			msg.post("main:/controller#controller", "map")
+		end
 	end
+
+	-- if ai health is 
 end
 
 function player.drawCard(player)

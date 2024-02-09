@@ -9,9 +9,3 @@ local card_data = {
 }
 
 return card_data
---[[
-Type Resistance Weakness
-
-aquatic desert forest
-desert forest aquatic
-forest aquatic desert --]]
