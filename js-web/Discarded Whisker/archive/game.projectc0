@@ -5,6 +5,7 @@ write_log = 0
 compress_archive = 1
 publisher = unnamed
 developer = unnamed
+bundle_resources = /Users/tristenmacpherson/Discarded Whisker/res
 title_as_file_name = DiscardedWhisker
 
 [display]
@@ -49,7 +50,7 @@ velocity_threshold = 1
 max_fixed_timesteps = 2
 
 [bootstrap]
-main_collection = /main/main.collectionc
+main_collection = /Collections/main/main.collectionc
 render = /builtins/render/default.renderc
 
 [graphics]
