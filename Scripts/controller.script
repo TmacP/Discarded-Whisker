@@ -7,16 +7,16 @@ function final(self)
 	msg.post(".", "release_input_focus")
 end
 
-function on_message(self, message_id, message, sender)    
+function on_message(self, message_id, message, sender)
 
 	if message_id == hash("game_over") then
 		msg.post("#game_over", "load")
-		msg.post("#card_game", "unload")		
+		msg.post("#card_game", "unload")
 	elseif message_id == hash("map") then
-		msg.post("map", "load")
-		msg.post("#card_game", "unload")		
+		msg.post("#map", "load")
+		msg.post("#card_game", "unload")
 	end
-	if message_id == hash("proxy_loaded") then              -- [2]
+	if message_id == hash("proxy_loaded") then
 		msg.post(sender, "init")
 		msg.post(sender, "enable")
 	end
