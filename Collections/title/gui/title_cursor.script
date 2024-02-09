@@ -1,0 +1,58 @@
+local cursor = require "in.cursor"
+
+local debug = true
+
+function init(self)
+	if not go.get("#cursor", "acquire_input_focus") then
+		self.forward_input = true
+		msg.post(".", "acquire_input_focus")
+	end
+
+	cursor.listen(msg.url("#cursor"), cursor.DRAG_START, function(message_id, message)
+		if debug then print("Drag start") end
+		-- prevent dragging of deck and discard TODO
+		if message.group == hash("playzone") then
+			if debug then print("Prevent drag on blue") end
+			return true
+		end
+	end)
+end
+
+function on_input(self, action_id, action)
+	if self.forward_input then
+		msg.post("#cursor", "input", { action_id = action_id, action = action })
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == cursor.OVER then
+		if debug then print("Cursor over", message.id, message.group, message.x, message.y) end
+		-- track if above a dropzone
+		if message.group == hash("play") then
+			self.over_play = true
+		end
+		
+	elseif message_id == cursor.OUT then
+		if debug then print("Cursor out", message.id, message.group, message.x, message.y) end
+		-- track if moving outside dropzone
+		if message.group == hash("play") then
+			self.over_play = false
+		end
+		
+	elseif message_id == cursor.PRESSED then
+			if debug then print("Pressed", message.id, message.group, message.x, message.y) end
+		elseif message_id == cursor.RELEASED then
+			if debug then  print("Released", message.id, message.group, message.x, message.y) end
+		elseif message_id == cursor.CLICKED then
+			if debug then print("Clicked", message.id, message.group, message.x, message.y) end
+			if message.group == hash("play") then
+				print("play")
+				msg.post("main:/controller#controller", "card_game")
+				--msg.post("/factory#card_factory", "play_card", { hash(message.id)})
+				--go.delete(message.id)
+			end
+		end
+	end
+
+			
+

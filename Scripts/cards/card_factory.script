@@ -218,7 +218,7 @@ function on_message(self, message_id, message, sender)
 
 	
 		-- if the cursor sends the play card message we play the card and delete it
-	if message_id == hash("play_card") then
+		if message_id == hash("play_card")  and players_turn then
 		for message_id, card_info in pairs(spawned_cards) do
 			--print("Message ID:", message_id)
 			for card_key, card_value in pairs(card_info) do

@@ -1,6 +1,6 @@
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#card_game", "load")
+	msg.post("#title", "load")
 end
 
 function final(self)
@@ -15,6 +15,10 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("map") then
 		msg.post("#map", "load")
 		msg.post("#card_game", "unload")
+	elseif message_id == hash("card_game") then
+		msg.post("#card_game", "load")
+		msg.post("#map", "unload")
+		msg.post("#title", "unload") -- for now but later will move to map
 	end
 	if message_id == hash("proxy_loaded") then
 		msg.post(sender, "init")
