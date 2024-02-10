@@ -8,6 +8,7 @@ local debuganimatePlayers = true
 local players_turn = nil
 
 local card_data = require "Scripts.cards.card_data"
+local player_deck = require "Collections.main.player_deck"
 local playerModule = require "Scripts.player"
 
 local spawned_cards = {} -- keep track of what the factory creates
@@ -25,6 +26,16 @@ local original_position = vmath.vector3()
 
 function init(self)
 
+	-- add player_deck to Player
+	local pd = player_deck.get_state()
+	for _, card in ipairs(pd) do
+		table.insert(currentPlayer.deck, card)
+	end
+	
+	-- add player_deck to ai till we implement ai decks
+	for _, card in ipairs(pd) do
+		table.insert(ai.deck, card)
+	end
 	
 	player_turn(self)
 	-- show the deck of cards

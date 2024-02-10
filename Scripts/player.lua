@@ -1,17 +1,11 @@
 -- player.lua
 
-
 local player = {}
 
 function player.create()
 	local newPlayer = {
 		-- the cards in the players deck
-		deck = {
-			{ name = "SeaHorse"},
-			{ name = "Deer"},
-			{ name = "RedFox"},
-			--{ name = "Chest" },
-		},
+		deck = {},
 		-- they draw cards from the deck into their hand
 		hand = {},
 		-- they play cards from their hand into their playzone
@@ -25,28 +19,20 @@ end
 
 function player.takeDamage(player, damage, team)
 	player.health = math.max(player.health - damage, 0)
-	print(player.health)
 	-- Send a message to update the GUI health bar
 	-- if player
-	print(team)
 	if team == "player" then
 		msg.post("gui#player_health", "update_health", { health = player.health })
-		-- if player health is zero they lose
 		if player.health == 0 then
-			print("YOU LOSE " .. tostring(team))
 			msg.post("main:/controller#controller", "game_over")
 		end
 	-- if ai
 	elseif team == "ai" then
 		msg.post("gui#ai_health", "update_health", { health = player.health })
-		-- if player health is zero they lose
 		if player.health == 0 then
-			print("YOU LOSE " .. tostring(team))
 			msg.post("main:/controller#controller", "map")
 		end
 	end
-
-	-- if ai health is 
 end
 
 function player.drawCard(player)

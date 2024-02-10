@@ -1,6 +1,6 @@
 local cursor = require "in.cursor"
-
-local debug = true
+local player_deck = require "Collections.main.player_deck"
+local debug = false
 
 function init(self)
 	if not go.get("#cursor", "acquire_input_focus") then
@@ -31,14 +31,14 @@ function on_message(self, message_id, message, sender)
 		if message.group == hash("play") then
 			self.over_play = true
 		end
-		
+
 	elseif message_id == cursor.OUT then
 		if debug then print("Cursor out", message.id, message.group, message.x, message.y) end
 		-- track if moving outside dropzone
 		if message.group == hash("play") then
 			self.over_play = false
 		end
-		
+
 	elseif message_id == cursor.PRESSED then
 			if debug then print("Pressed", message.id, message.group, message.x, message.y) end
 		elseif message_id == cursor.RELEASED then
@@ -46,10 +46,11 @@ function on_message(self, message_id, message, sender)
 		elseif message_id == cursor.CLICKED then
 			if debug then print("Clicked", message.id, message.group, message.x, message.y) end
 			if message.group == hash("play") then
-				print("play")
+				--- for now just add the cards eventually will pick from 3 deck types
+				player_deck.add_card({name = "RedFox"})
+				player_deck.add_card({name = "Deer"})
+				player_deck.add_card({name = "SeaHorse"})
 				msg.post("main:/controller#controller", "card_game")
-				--msg.post("/factory#card_factory", "play_card", { hash(message.id)})
-				--go.delete(message.id)
 			end
 		end
 	end
