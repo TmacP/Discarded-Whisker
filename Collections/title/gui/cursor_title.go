@@ -59,6 +59,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 1\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 1.0\n"
   "}\n"

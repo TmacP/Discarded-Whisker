@@ -1,6 +1,6 @@
 local cursor = require "in.cursor"
 
-local debug = true
+local debug = false
 
 function init(self)
 	if not go.get("#cursor", "acquire_input_focus") then

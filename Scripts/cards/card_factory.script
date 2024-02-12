@@ -2,8 +2,8 @@
 
 local debugPlayer = false
 local debugAi = false
-local debugBattle = true
-local debuganimatePlayers = true
+local debugBattle = false
+local debuganimatePlayers = false
 
 local players_turn = nil
 
@@ -18,6 +18,9 @@ local rounds = 1
 local y = 29
 local x = 55
 local card_object = nil
+
+local id = nil
+local url = nil
 
 local currentPlayer = playerModule.create()  -- Create a player instance
 local ai = playerModule.create() -- create an ai opponent
@@ -158,7 +161,7 @@ function playNextAnimation(animations, index)
 	local animation = animations[index]
 	animatePlayers(elements, animation.team, animation.position, function() 
 		-- Callback for the current animation
-		print("Animation complete for team:", animation.team, "position:", animation.position)
+		if debuganimatePlayers then print("Animation complete for team:", animation.team, "position:", animation.position) end
 
 		-- Start the next animation in the chain
 		playNextAnimation(animations, index + 1)
@@ -187,14 +190,22 @@ function animatePlayers(elements, team, position, callback)
 			if debuganimatePlayers then
 				print("-- found the position: " .. p .. " and the team: " .. t .. " and the object: " .. object)
 			end
-			-- Call player.takeDamage here
-			if team == "player" then
-				playerModule.takeDamage(currentPlayer, 1, "ai")  -- Replace damageAmount with the actual damage value
-			elseif team == "ai" then
-				playerModule.takeDamage(ai, 1, "player")  -- Replace damageAmount with the actual damage value
-			end
+
+
+			-- animate attacker bouncing
 			go.set(object, "position.y", 99)
 			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, 0, callback)
+
+			
+			-- damage 
+			if team == "player" then -- if team is player damage ai in from position for 1 damage
+				dealDamageToElement("ai", 1, 1)
+			elseif team == "ai" then -- if team is ai damage player inf front position for 1 damage
+				dealDamageToElement("player", 1, 1)
+			end
+
+
+			
 			break -- Exit the loop once a valid animation is found
 		end
 	end
@@ -258,9 +269,56 @@ end
 
 function element(name, flip, team, position)
 	--print("name of elemenet" .. name )	
+	local hp = card_data.get_health(name)
 	local cardProperties = { name = hash(name), flip = flip, team = hash(team), position = position }
-	local id = factory.create("#element_factory", nil, nil, cardProperties )
-	table.insert(elements, {Id = id, Name = name, Team = team, Position = position})
+	id = factory.create("#element_factory", nil, nil, cardProperties )
+	url = msg.url("card_game", id, "element")
+	-- let element script know to update sprite positions like this
+	--msg.post(url, "update_sprite_position")
+	table.insert(elements, {Id = id, Name = name, Team = team, Position = position, Hp = hp})
 end
 
-
+function dealDamageToElement(team, position, damage)
+	for i, element in ipairs(elements) do
+		if element.Team == team and element.Position == position then
+			element.Hp = element.Hp - damage
+			if element.Hp <= 0 then
+				-- Remove element from playboard
+				go.delete(element.Id)
+				-- Remove from elements table
+				table.remove(elements, i)
+				-- TODO ADD ELEMENT TO DISCARD
+				-- Update positions of remaining elements on the same team
+				for j = i, #elements do
+					if elements[j].Team == team then
+						local p = go.get_position(elements[j].Id)
+						print(p)
+						if elements[j].Position == 2 then
+							elements[j].Position = 1
+							if elements[j].Team == "player" then
+								p.x = 125
+							elseif elements[j].Team == "ai" then
+								p.x = 195
+							end
+						elseif elements[j].Position == 3 then
+							elements[j].Position = 2
+							if elements[j].Team == "player" then
+								p.x = 90
+							elseif elements[j].Team == "ai" then
+								p.x = 230
+							end
+						end
+					go.set_position(p, elements[j].Id)
+					end
+				end
+			end
+			return  -- Exit the loop after dealing damage
+		end
+	end
+	-- If no element is found, deal damage to player or AI directly
+	if team == "ai" then
+		playerModule.takeDamage(currentPlayer, damage, "ai")
+	elseif team == "player" then
+		playerModule.takeDamage(ai, damage, "player")
+	end
+end

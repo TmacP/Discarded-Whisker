@@ -39,6 +39,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 47.632065\n"
   "  data: 13.217789\n"

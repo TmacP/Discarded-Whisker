@@ -32,3 +32,10 @@ function init(self)
 
 	go.set_position(p, "#sprite")
 end
+
+
+
+
+function on_message(self, message_id, message, sender)
+	print("message recieved")
+end
