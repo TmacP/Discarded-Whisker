@@ -1,30 +1,10 @@
 name: "map"
 instances {
-  id: "gui"
-  prototype: "/Collections/map/gui/gui.go"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
   id: "map"
   prototype: "/Collections/map/map.go"
   position {
-    x: -1.0
-    y: 449.0
+    x: 4.0
+    y: 8.0
     z: 0.0
   }
   rotation {
@@ -34,8 +14,8 @@ instances {
     w: 1.0
   }
   scale3 {
-    x: 2.0
-    y: 2.0
+    x: 2.2
+    y: 2.005
     z: 1.0
   }
 }
