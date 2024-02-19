@@ -15,10 +15,13 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("map") then
 		msg.post("#map", "load")
 		msg.post("#card_game", "unload")
+		msg.post("#title", "unload") -- will have an intermidiate scene so this will get deleted
 	elseif message_id == hash("card_game") then
 		msg.post("#card_game", "load")
 		msg.post("#map", "unload")
-		msg.post("#title", "unload") -- for now but later will move to map
+	elseif message_id == hash("title") then
+		msg.post("#title", "load")
+		msg.post("#game_over", "unload")
 	end
 	if message_id == hash("proxy_loaded") then
 		msg.post(sender, "init")

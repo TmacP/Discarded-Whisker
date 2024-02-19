@@ -11,8 +11,8 @@ background_color {
 }
 nodes {
   position {
-    x: 320.0
-    y: 600.0
+    x: 321.0
+    y: 109.0
     z: 0.0
     w: 1.0
   }
@@ -42,7 +42,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "You Win"
+  text: "Play cards"
   font: "system_font"
   id: "text"
   xanchor: XANCHOR_NONE

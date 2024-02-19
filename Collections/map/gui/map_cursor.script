@@ -40,20 +40,16 @@ function on_message(self, message_id, message, sender)
 		end
 
 	elseif message_id == cursor.PRESSED then
-			if debug then print("Pressed", message.id, message.group, message.x, message.y) end
-		elseif message_id == cursor.RELEASED then
-			if debug then  print("Released", message.id, message.group, message.x, message.y) end
-		elseif message_id == cursor.CLICKED then
-			if debug then print("Clicked", message.id, message.group, message.x, message.y) end
-			if message.group == hash("play") then
-				--- for now just add the cards eventually will pick from 3 deck types
-				player_deck.add_card({name = "RedFox"})
-				player_deck.add_card({name = "Deer"})
-				player_deck.add_card({name = "SeaHorse"})
-				msg.post("main:/controller#controller", "map")
-			end
+		if debug then print("Pressed", message.id, message.group, message.x, message.y) end
+	elseif message_id == cursor.RELEASED then
+		if debug then  print("Released", message.id, message.group, message.x, message.y) end
+	elseif message_id == cursor.CLICKED then
+		if debug then print("Clicked", message.id, message.group, message.x, message.y) end
+		if message.group == hash("play") then
+			msg.post("main:/controller#controller", "card_game")
 		end
 	end
+end
 
-			
+
 

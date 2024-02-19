@@ -1,6 +1,26 @@
 components {
-  id: "game_over"
-  component: "/Collections/game_over/gui/game_over.gui"
+  id: "cursor"
+  component: "/in/cursor.script"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  properties {
+    id: "action_id"
+    value: "mouse_button_left"
+    type: PROPERTY_TYPE_HASH
+  }
+}
+components {
+  id: "Game_over_cursor"
+  component: "/Collections/game_over/gui/Game_over_cursor.script"
   position {
     x: 0.0
     y: 0.0
@@ -17,18 +37,18 @@ embedded_components {
   id: "collisionobject"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
-  "type: COLLISION_OBJECT_TYPE_STATIC\n"
+  "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"play\"\n"
-  "mask: \"cursor\"\n"
+  "group: \"cursor\"\n"
+  "mask: \"play\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
-  "    shape_type: TYPE_BOX\n"
+  "    shape_type: TYPE_SPHERE\n"
   "    position {\n"
-  "      x: 320.0\n"
-  "      y: 110.0\n"
+  "      x: 0.0\n"
+  "      y: 0.0\n"
   "      z: 0.0\n"
   "    }\n"
   "    rotation {\n"
@@ -38,12 +58,10 @@ embedded_components {
   "      w: 1.0\n"
   "    }\n"
   "    index: 0\n"
-  "    count: 3\n"
+  "    count: 1\n"
   "    id: \"\"\n"
   "  }\n"
-  "  data: 100.0\n"
-  "  data: 50.0\n"
-  "  data: 10.0\n"
+  "  data: 1.0\n"
   "}\n"
   "linear_damping: 0.0\n"
   "angular_damping: 0.0\n"

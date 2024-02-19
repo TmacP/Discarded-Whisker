@@ -15,7 +15,7 @@ function update_health_bar(newHealth)
 	local originalPosition = gui.get_position(healthBarNode)
 
 	-- Calculate the new width based on the health ratio
-	local maxHealth = 20
+	local maxHealth = 10
 	local healthRatio = newHealth / maxHealth
 	local newWidth = math.max(0,originalSize.x - 5)
 

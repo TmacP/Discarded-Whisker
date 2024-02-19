@@ -12,7 +12,7 @@ function player.create()
 		playzone = {},
 		-- elements get discarded when they are beaten off the playzone
 		discard = {},
-		health = 20, -- 20 is maxhealth
+		health = 10, -- 20 is maxhealth
 	}
 	return newPlayer
 end
