@@ -15,8 +15,8 @@ local spawned_cards = {} -- keep track of what the factory creates
 local elements = {} -- keep track of the elements on the board
 
 local rounds = 1
-local y = 29
-local x = 55
+local y = 230
+local x = 160
 local card_object = nil
 
 local id = nil
@@ -43,8 +43,8 @@ function init(self)
 	player_turn(self)
 	-- show the deck of cards
 	local p_deck = go.get_position()
-	p_deck.x = 20 -- Set the desired x-coordinate
-	p_deck.y = 29 -- Set the desired y-coordinate
+	p_deck.x = 50 -- Set the desired x-coordinate
+	p_deck.y = 230 -- Set the desired y-coordinate
 	card_object = factory.create("#factory", p_deck, nil, {name = hash("Deck")})
 end
 
@@ -64,8 +64,8 @@ function player_turn(self)
 
 		-- Set the initial position for the card at the deck
 		local deckPosition = go.get_position()
-		deckPosition.x = 20
-		deckPosition.y = 29
+		deckPosition.x = 50
+		deckPosition.y = 230
 		
 		local cardObject = factory.create("#factory", deckPosition, nil, cardProperties)
 		
@@ -78,7 +78,7 @@ function player_turn(self)
 
 		-- Tween the card from the deck to the player's hand
 		go.animate(cardObject, "position", go.PLAYBACK_ONCE_FORWARD, playerHandPosition, go.EASING_LINEAR, 0.5, 0)
-		x = x + 35
+		x = x + 80
 	else
 		if debugPlayer then print("-- No cards left in the player's deck. Or hand has 7 cards") end
 	end
@@ -193,8 +193,8 @@ function animatePlayers(elements, team, position, callback)
 
 
 			-- animate attacker bouncing
-			go.set(object, "position.y", 99)
-			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 109, go.EASING_INBOUNCE, 0.75, 0, callback)
+			go.set(object, "position.y", 738)
+			go.animate(object, "position.y", go.PLAYBACK_ONCE_PINGPONG, 760, go.EASING_INBOUNCE, 0.75, 0, callback)
 
 			
 			-- damage 
@@ -296,16 +296,16 @@ function dealDamageToElement(team, position, damage)
 						if elements[j].Position == 2 then
 							elements[j].Position = 1
 							if elements[j].Team == "player" then
-								p.x = 125
+								p.x = 274
 							elseif elements[j].Team == "ai" then
-								p.x = 195
+								p.x = 366
 							end
 						elseif elements[j].Position == 3 then
 							elements[j].Position = 2
 							if elements[j].Team == "player" then
-								p.x = 90
+								p.x = 183
 							elseif elements[j].Team == "ai" then
-								p.x = 230
+								p.x = 457
 							end
 						end
 					go.set_position(p, elements[j].Id)

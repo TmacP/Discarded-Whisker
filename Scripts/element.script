@@ -10,23 +10,23 @@ function init(self)
 	sprite.set_hflip("#sprite", self.flip)
 	local p = go.get_position()
 
-	p.y = 99 -- Set the desired y-coordinate
+	p.y = 738 -- Set the desired y-coordinate
 
 	if self.team == hash("player") then
 		if self.position == 1 then
-			p.x = 125
+			p.x = 274
 		elseif self.position == 2 then
-			p.x = 90
+			p.x = 183
 		elseif self.position == 3 then
-			p.x = 55
+			p.x = 91
 		end
 	elseif self.team == hash("ai") then
 		if self.position == 1 then
-			p.x = 195
+			p.x = 366
 		elseif self.position == 2 then
-			p.x = 230
+			p.x = 457
 		elseif self.position == 3 then
-			p.x = 265
+			p.x = 549
 		end
 	end
 
