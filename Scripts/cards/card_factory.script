@@ -20,7 +20,6 @@ local x = 160
 local card_object = nil
 
 local id = nil
-local url = nil
 
 local currentPlayer = playerModule.create()  -- Create a player instance
 local ai = playerModule.create() -- create an ai opponent
@@ -46,6 +45,11 @@ function init(self)
 	p_deck.x = 50 -- Set the desired x-coordinate
 	p_deck.y = 230 -- Set the desired y-coordinate
 	card_object = factory.create("#factory", p_deck, nil, {name = hash("Deck")})
+	-- disable the collider so cant drag deck
+	local url = msg.url("card_game", card_object, "collisionobject")
+	-- let element script know to update sprite positions like this
+	--msg.post(url, "update_sprite_position")
+	msg.post(url, "disable")
 end
 
 
@@ -68,7 +72,6 @@ function player_turn(self)
 		deckPosition.y = 230
 		
 		local cardObject = factory.create("#factory", deckPosition, nil, cardProperties)
-		
 		table.insert(spawned_cards, {[cardObject] = drawnCard.name})
 
 		-- Set the final position for the card at the player's hand
@@ -230,15 +233,17 @@ function on_message(self, message_id, message, sender)
 			-- if players deck is empty if so then shuffle discard and move to deck.
 			playerModule.newDeck(currentPlayer)
 			if debugPlayer then print("after newDeck " .. #currentPlayer.deck) end
-			-- Restore the original position to make the card object visible
-			go.set_position(original_position, card_object)
-			x = 55
 		end
 		-- after player it is ai's turn
 		ai_turn(self)
 	end
 
-	
+	if message_id == hash("new_deck") then
+		-- since the player drew a new deck from the discard we will show it if there are any
+		if #currentPlayer.deck > 0 then
+			go.set_scale(1, card_object)
+		end
+	end
 		-- if the cursor sends the play card message we play the card and delete it
 		if message_id == hash("play_card")  and players_turn then
 		for message_id, card_info in pairs(spawned_cards) do
