@@ -287,14 +287,12 @@ function dealDamageToElement(team, position, damage)
 				go.delete(element.Id)
 				-- Remove from elements table
 				table.remove(elements, i)
-				print("after " .. #currentPlayer.playzone)
-				-- decrement playzone
+				-- decrement playzone add to discard
 				if team == "player" then
 					table.remove(currentPlayer.playzone, position)
 				elseif team == "ai" then
-					table.remove(ai.playzone, position) 
+					table.remove(ai.playzone, position)
 				end
-				-- TODO ADD ELEMENT TO DISCARD
 				-- Update positions of remaining elements on the same team
 				for j = i, #elements do
 					if elements[j].Team == team then

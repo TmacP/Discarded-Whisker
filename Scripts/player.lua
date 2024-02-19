@@ -66,12 +66,13 @@ function player.playCard(player, card)
 			break
 		end
 	end
-	-- Remove the card from the hand and add it to the discard pile
+	-- Remove the card from the hand and add it to the discard
 	if indexToRemove then
 		table.remove(player.hand, indexToRemove)
 		table.insert(player.playzone, {name = card})
+		table.insert(player.discard, {name = card})
 	else
-		-- print("Card not found in hand.")
+		print("Card not found in hand.")
 	end
 end
 
