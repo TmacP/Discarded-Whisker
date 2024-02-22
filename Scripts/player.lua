@@ -71,9 +71,12 @@ function player.playCard(player, card)
 		table.remove(player.hand, indexToRemove)
 		table.insert(player.playzone, {name = card})
 		table.insert(player.discard, {name = card})
-	else
-		print("Card not found in hand.")
 	end
+end
+
+function player.getCard(player)
+	card = (player.hand[1].name)
+	return card
 end
 
 

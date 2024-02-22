@@ -1,7 +1,7 @@
 -- card_factory.script
 
 local debugPlayer = false
-local debugAi = false
+local debugAi = true
 local debugBattle = false
 local debuganimatePlayers = false
 
@@ -105,31 +105,33 @@ function player_turn(self)
 	players_turn = true
 end
 
-
-
 function ai_turn(self)
 	players_turn = false
 	if debugAi then print("--------------------") end
 	if debugAi then print("-- ai's turn begins") end
+	
 	local drawnCard = playerModule.drawCard(ai)
 
 	if drawnCard then
 		if debugAi then print("-- Drawing card from ai's deck: " .. drawnCard.name) end
-
-		-- AI plays the first card from its hand into playzone
-		local aiCard = table.remove(ai.hand, 1)
-		table.insert(ai.playzone, aiCard)
-		if aiCard then
-			playerModule.playCard(ai, aiCard.name)
-			if debugAi then print("ai playzone " .. #ai.playzone) end
-			element(aiCard.name, true, "ai", #ai.playzone)  -- Create the corresponding element
 	end
-	else
+	
+	if #ai.playzone < 3 then
+		local ai_card = playerModule.getCard(ai)
+		playerModule.playCard(ai, ai_card)
+		element(ai_card, true, "ai", #ai.playzone)
+	end
+		
+	if #ai.deck == 0 then
+		if debugAi then print("-- Ai deck == : " .. #ai.deck) end
+		if debugAi then print("-- Ai discard == : " .. #ai.discard) end
+		-- if ai deck is empty if so then shuffle discard and move to deck.
+		playerModule.newDeck(ai)
 		if debugAi then print("-- No cards left in the ai's deck.") end 
 	end
 
 	rounds = rounds + 1
-	 if debugAi then print("-- ai's turn ends") end
+	if debugAi then print("-- ai's turn ends") end
 	if debugAi then print("") end
 
 	battle(self)
