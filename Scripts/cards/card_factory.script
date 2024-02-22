@@ -1,7 +1,7 @@
 -- card_factory.script
 
 local debugPlayer = false
-local debugAi = true
+local debugAi = false
 local debugBattle = false
 local debuganimatePlayers = false
 

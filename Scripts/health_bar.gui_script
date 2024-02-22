@@ -1,5 +1,11 @@
+local Size = nil
+local Position = nil
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
+	local healthBarNode = gui.get_node("box")
+	Position = gui.get_position(healthBarNode)
+	Size = gui.get_size(healthBarNode)
 end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("update_health") then
@@ -17,13 +23,15 @@ function update_health_bar(newHealth)
 	-- Calculate the new width based on the health ratio
 	local maxHealth = 10
 	local healthRatio = newHealth / maxHealth
-	local newWidth = math.max(0,originalSize.x - 5)
+	local newWidth = originalSize.x - (Size.x / maxHealth)
 
 	-- Set the new size of the health bar
 	local newSize = vmath.vector3(newWidth, originalSize.y, 1)
 	gui.set_size(healthBarNode, newSize)
 
 	-- Calculate the new position to create the shrinking effect from one side
-	local newPosition = vmath.vector3(originalPosition.x - (originalSize.x - newWidth) * 0.5, originalPosition.y, 0)
+	print((Size.x / maxHealth))
+	print(originalPosition)
+	local newPosition = vmath.vector3(originalPosition.x - ((Size.x / maxHealth) * 0.5), originalPosition.y, 0)
 	gui.set_position(healthBarNode, newPosition)
 end
